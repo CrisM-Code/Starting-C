@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+//Functions for these are not necessary but i wanted some practice
 void Multiplation(int x, int y) {
     int answer = x * y;
     printf("\n%i * %i = %i\n", x, y, answer);
@@ -25,7 +26,7 @@ void menu_page();
 int main() {
 
     int choice;
-    while (1) {
+    while (1) {              //Using While (1) makes the program run forever until 0 is entered
         menu_page();
         scanf("%i", &choice);
 
