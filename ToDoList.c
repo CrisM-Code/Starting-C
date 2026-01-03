@@ -26,13 +26,12 @@ int main() {
         menu_page();
         scanf("%i", &user_choice);
         while (getchar() != '\n');
+        printf("\n");
 
         if (user_choice == 0) {
             printf("Exiting Program...");
             break;
         }
-
-
         
         switch (user_choice) {
             case 1: 
@@ -48,7 +47,7 @@ int main() {
                 del_task();
                 break;
             default:
-                printf("Invalid Input!");
+                printf("Invalid Input!\n");
                 break;
         }
     }
@@ -73,8 +72,21 @@ void add_task() {
     }
 
     printf("\nEnter task: ");
-    fgets(tasks[task_count].text, sizeof(tasks[task_count].text), stdin);
+
+    if (fgets(tasks[task_count].text,
+                sizeof(tasks[task_count].text),
+                stdin) == NULL) {
+            printf("Input error.\n");
+            return;
+    }
+
     tasks[task_count].text[strcspn(tasks[task_count].text, "\n")] = '\0';
+
+     if (strlen(tasks[task_count].text) == 0) {
+        printf("Task cannot be empty.\n");
+        return;
+    }
+
     tasks[task_count].completed = 0;
     task_count++;
 }
@@ -98,6 +110,11 @@ void complete() {
     int choice;
     scanf("%i", &choice);
     while (getchar() != '\n');
+
+    if (choice < 0 || choice > task_count) {
+        printf("\nInvalid Input!\n");
+        return;
+    }
     choice--;
     tasks[choice].completed = 1;
 }
