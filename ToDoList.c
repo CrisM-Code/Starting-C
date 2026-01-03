@@ -19,26 +19,91 @@ void del_task();
 void complete();
 
 
-int main(){
-    menu_page();
-    add_task();
+int main(void) {
+    
+    int user_choice;
+
+    while (1) {
+        menu_page();
+        scanf("%i", &user_choice);
+        while (getchar() != '\n');
+
+        if (user_choice == 0) {
+            printf("Exiting Program...");
+            break;
+        }
+
+
+        
+        switch (user_choice) {
+            case 1: 
+                add_task();
+                break;
+            case 2:
+                view_task();
+                break;
+            case 3: 
+                complete();
+                break;
+            case 4: 
+                del_task();
+                break;
+            default:
+                printf("Invalid Input!");
+                break;
+        }
+    }
     
     return 0;
 }
 
 void menu_page() {
-    printf("==== TO-DO List ====\n\n");
+    printf("\n==== TO-DO List ====\n\n");
     printf("1. Add Task\n");
     printf("2. View Task\n");
     printf("3. Mark Task as complete\n");
     printf("4. Delete Task\n");
-    printf("5. Exit\n");
+    printf("0. Exit\n");
     printf("Choose an option: ");
 }
 
 void add_task() {
-    printf("Enter task: ");
+    if (task_count >= MAX_TASK) {
+        printf("Task list is full!\n");
+        return;
+    }
+
+    printf("\nEnter task: ");
     fgets(tasks[task_count].text, sizeof(tasks[task_count].text), stdin);
-    printf("%s", tasks[task_count]);
+    tasks[task_count].completed = 0;
+    task_count++;
 }
 
+void view_task() {
+    for (int i = 0; i < task_count; i++) {
+        printf("%i\n", tasks[i]);
+    }
+}
+
+void complete() {
+    printf("\nWhich task did you complete? ");
+    int choice;
+    scanf("%i", &choice);
+    choice--;
+    tasks[choice].completed = 1;
+}
+
+void del_task() {
+    int choice;
+    printf("What task do you want to delete? ");
+    scanf("%i", &choice);
+    choice--;
+    for (int i = choice; i < task_count - 1; i++) {
+        tasks[i] = tasks[i + 1];
+        task_count--;
+    }
+
+    task_count--;
+
+    printf("Task deleted.\n");
+}
