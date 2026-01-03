@@ -19,10 +19,9 @@ void del_task();
 void complete();
 
 
-int main(void) {
-    
+int main() {
+     
     int user_choice;
-
     while (1) {
         menu_page();
         scanf("%i", &user_choice);
@@ -75,13 +74,22 @@ void add_task() {
 
     printf("\nEnter task: ");
     fgets(tasks[task_count].text, sizeof(tasks[task_count].text), stdin);
+    tasks[task_count].text[strcspn(tasks[task_count].text, "\n")] = '\0';
     tasks[task_count].completed = 0;
     task_count++;
 }
 
 void view_task() {
+    if (task_count == 0) {
+        printf("No tasks.\n");
+        return;
+    }
+
     for (int i = 0; i < task_count; i++) {
-        printf("%i\n", tasks[i]);
+        printf("%d. [%c] %s\n",
+               i + 1,
+               tasks[i].completed ? 'x' : ' ',
+               tasks[i].text);
     }
 }
 
@@ -89,6 +97,7 @@ void complete() {
     printf("\nWhich task did you complete? ");
     int choice;
     scanf("%i", &choice);
+    while (getchar() != '\n');
     choice--;
     tasks[choice].completed = 1;
 }
@@ -100,7 +109,6 @@ void del_task() {
     choice--;
     for (int i = choice; i < task_count - 1; i++) {
         tasks[i] = tasks[i + 1];
-        task_count--;
     }
 
     task_count--;

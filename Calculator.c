@@ -1,3 +1,5 @@
+//This is a calculator program using functions, switch statements, and loops
+
 #include <stdio.h>
 
 //Functions for these are not necessary but i wanted some practice
