@@ -21,6 +21,7 @@ void complete();
 
 int main(){
     menu_page();
+    add_task();
     
     return 0;
 }
@@ -36,6 +37,8 @@ void menu_page() {
 }
 
 void add_task() {
-    printf("What task");
+    printf("Enter task: ");
+    fgets(tasks[task_count].text, sizeof(tasks[task_count].text), stdin);
+    printf("%s", tasks[task_count]);
 }
 
