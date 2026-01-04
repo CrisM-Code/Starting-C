@@ -21,10 +21,14 @@ void add_task();
 void view_task();
 void del_task();
 void complete();
+void load_tasks();
+void save_tasks();
 
 
 
 int main() {
+
+    load_tasks();
 
     int user_choice;
     while (1) {      
@@ -36,6 +40,7 @@ int main() {
 
         
         if (user_choice == 0) {
+            save_tasks();
             printf("Exiting Program...");
             printf("\n");
             break;
@@ -97,14 +102,10 @@ void add_task() {
         return;
     }
 
-    fptr = fopen("ToDo.txt", "w");
-    for (int i = 0; i < task_count; i++) {
-        fprintf(fptr, "%i|%s", tasks[i].completed, tasks[i].text);
-    }
-    fclose(fptr);
-
     tasks[task_count].completed = 0;
     task_count++;
+
+    save_tasks();
 }
 
 
@@ -129,18 +130,14 @@ void complete() {
     scanf("%i", &choice);
     while (getchar() != '\n');
 
-    if (choice < 0 || choice > task_count) {
+    if (choice < 1 || choice > task_count) {
         printf("\nInvalid Input!\n");
         return;
     }
     choice--;
     tasks[choice].completed = 1;
 
-    fptr = fopen("ToDo.txt", "w");
-    for (int i = 0; i < task_count; i++) {
-        fprintf(fptr, "%i|%s", tasks[i].completed, tasks[i].text);
-    }
-    fclose(fptr);
+    save_tasks();
 }
 
 
@@ -148,8 +145,10 @@ void del_task() {
     int choice;
     printf("\nWhat task do you want to delete? ");
     scanf("%i", &choice);
+    while (getchar() != '\n');
 
-    if (choice < 0 || choice > task_count) {
+
+    if (choice < 1 || choice > task_count) {
         printf("\nInvalid Input!\n");
         return;
     }
@@ -161,11 +160,38 @@ void del_task() {
 
     task_count--;
 
-    fptr = fopen("ToDo.txt", "w");
-    for (int i = 0; i < task_count; i++) {
-        fprintf(fptr, "%i|%s", tasks[i].completed, tasks[i].text);
-    }
-    fclose(fptr);
+    save_tasks();
 
     printf("Task deleted.\n");
+}
+
+void load_tasks() {
+    FILE *fp = fopen("ToDo.txt", "r");
+    if (fp == NULL) return;
+
+    char line[MAX_LEN + 10];
+
+    while (fgets(line, sizeof(line), fp) && task_count < MAX_TASK) {
+        if (sscanf(line, "%d|%99[^\n]",
+               &tasks[task_count].completed,
+               tasks[task_count].text) == 2) {
+        task_count++;
+        }
+    }
+
+    fclose(fp);
+}
+
+void save_tasks() {
+    fptr = fopen("ToDo.txt", "w");
+    
+    if (fptr == NULL) {
+        printf("File Error!");
+        return;
+    }
+
+    for (int i = 0; i < task_count; i++) {
+        fprintf(fptr, "%i|%s\n", tasks[i].completed, tasks[i].text);
+    }
+    fclose(fptr);
 }
