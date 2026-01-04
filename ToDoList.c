@@ -3,6 +3,7 @@
 //Everything here is going to be placed on GitHub as practice
 
 #include <stdio.h>
+#include <string.h>
 
 
 //the #define will replace MAX_TASK with 50 whenever it is written in the program
@@ -139,6 +140,11 @@ void complete() {
 //This function deletes a task by moving the indexs
 void del_task() {
     int choice;
+
+    if (task_count == 0) {
+        printf("There are no tasks to delete.\n");
+        return;
+    }
     printf("\nWhat task do you want to delete? ");
     scanf("%i", &choice);
 
