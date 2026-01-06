@@ -4,7 +4,7 @@ void main_menu();
 void basic_math();
 void settings();
 void scientific_math();
-void conversion();
+void conversions();
 int user_choice();
 int first_num();
 int second_num();
@@ -23,6 +23,20 @@ int main() {
 
         switch (choice) {
             case 1:
+                basic_math();
+                break;
+            case 2:
+                scientific_math();
+                break;
+            case 3:
+                conversions();
+                break;
+            case 4:
+                settings();
+                break;
+            default:
+                printf("Invalid Input!\n");
+                break;
                 
         }
     }
@@ -58,29 +72,34 @@ void basic_math() {
         }
         
         switch (choice2) {
-            case 1: 
+            case 1: {
                 int x = first_num();
                 int y = second_num();
                 printf("%i + %i = %i\n", x, y, (x + y));
                 break;
-            case 2:
+            }
+            case 2: {
                 int x = first_num();
                 int y = second_num();
                 printf("%i - %i = %i\n", x, y, (x - y));
                 break;
-            case 3: 
+            }
+            case 3:  {
                 int x = first_num();
                 int y = second_num();
                 printf("%i x %i = %i\n", x, y, (x*y));
                 break;
-            case 4:
+            }
+            case 4: {
                 int x = first_num();
                 int y = second_num();
                 printf("%i / %i = %i\n", x, y, (x/y));
                 break;
-            default:
+            }
+            default: {
                 printf("Invalid Input!\n");
                 break;
+            }
         }
     }
 }
@@ -113,41 +132,46 @@ void conversions() {
         }
 
         switch (choice3) {
-            case 1:
+            case 1: {
                 printf("Enter temp in Fahrenheit: ");
                 float x;
                 scanf("%f", &x);
                 float temp = 5/9 * (x-32);
                 printf("%f F = %f C\n", x, temp);
                 break;
-            case 2:
+            }
+            case 2: {
                 printf("Enter temp in Celsius: ");
                 float x;
                 scanf("%f", &x);
                 float temp = 9/5 * x + 32;
                 printf("%f C = %f F\n", x, temp);
                 break;
-            case 3:
+            }
+            case 3: {
                 printf("Enter length in Feet: ");
                 float x;
                 scanf("%f", &x);
                 float length = x * 12;
                 printf("%f ft = %f in\n", x, length);
                 break;
-            case 4:
+            }
+            case 4: {
                 printf("Enter length in Inches: ");
                 float x;
                 scanf("%f", &x);
                 float length = x / 12;
                 printf("%f in = %f ft\n", x, length);
                 break;
-            case 5: 
+            }
+            case 5: {
                 printf("Enter weight in pounds: ");
                 float x;
                 scanf("%f", &x);
                 float weight = x / 2.2;
                 printf("%f ft = %f in\n", x, weight);
                 break;
+            }
             default:
                 printf("Invalid Input!\n");
                 break;
@@ -176,15 +200,15 @@ int user_choice(void) {
 }
 
 int first_num(void) {
-    int x;
+    int v;
     printf("Enter a number: ");
-    scanf("%i", &x);
-    return x;
+    scanf("%i", &v);
+    return v;
 }
 
 int second_num(void) {
-    int y;
+    int b;
     printf("Enter a number: ");
-    scanf("%i", &y);
-    return y;
+    scanf("%i", &b);
+    return b;
 }
