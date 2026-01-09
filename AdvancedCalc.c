@@ -1,34 +1,24 @@
+/*
+  This program is an advanced calculator which gives options to do basic, scientific, or conversion mathematics.
+  Each calculation is saved into an array for history and the user can view their history through the settings menu.
+  If the user chooses, he can save their history to a file named "CalcHistory.txt"
+*/
+
 #include <stdio.h>
 #include <math.h>
 #define MAX_HISTORY 100
 #define MAX_LEN 100
 
+//Value for main history array
 typedef struct {
     char problem[MAX_LEN];
 } Main;
 
+//Main history array
 Main main_history[MAX_HISTORY];
-int count = 0;
-
-typedef struct {
-    int a;
-    int b;
-    char op;
-    int result;
-} History;
-
-typedef struct {
-    float a;
-    char op1;
-    float b;
-    char op2;
-} History2;
-
-History2 history2[MAX_HISTORY];
-
-History history[MAX_HISTORY];
 int history_count = 0;
 
+//declare file pointer
 FILE *fp;
 
 void main_menu();
@@ -209,7 +199,7 @@ void conversions() {
                 float x;
                 scanf("%f", &x);
                 float temp = (5.0f/9.0f) * (x-32);
-                printf("%f F = %f C\n", x, temp);
+                printf("%.2f F = %.2f C\n", x, temp);
                 save_history2(x, 'F', temp, 'C');
                 break;
             }
@@ -218,7 +208,7 @@ void conversions() {
                 float x;
                 scanf("%f", &x);
                 float temp = (9.0f/5.0f) * x + 32;
-                printf("%f C = %f F\n", x, temp);
+                printf("%.2f C = %.2f F\n", x, temp);
                 save_history2(x, 'C', temp, 'F');
                 break;
             }
@@ -227,7 +217,7 @@ void conversions() {
                 float x;
                 scanf("%f", &x);
                 float length = x * 12;
-                printf("%f ft = %f in\n", x, length);
+                printf("%.2f ft = %.2f in\n", x, length);
                 save_history2(x, 'F', length, 'I');
                 break;
             }
@@ -236,7 +226,7 @@ void conversions() {
                 float x;
                 scanf("%f", &x);
                 float length = x / 12;
-                printf("%f in = %f ft\n", x, length);
+                printf("%.2f in = %.2f ft\n", x, length);
                 save_history2(x, 'I', length, 'F');
                 break;
             }
@@ -245,7 +235,7 @@ void conversions() {
                 float x;
                 scanf("%f", &x);
                 float weight = x / 2.2;
-                printf("%f lb = %f kg\n", x, weight);
+                printf("%.2f lb = %.2f kg\n", x, weight);
                 save_history2(x, 'P', weight, 'K');
                 break;
             }
@@ -336,7 +326,7 @@ void scientific_math() {
                 scanf("%f", &x);
                 result = sqrt(x);
                 printf("Square Root of %f is %f\n", x, result);
-                snprintf(main_history[history_count].problem, MAX_LEN, "Sqaure root of %f is %f", x, result);
+                snprintf(main_history[history_count].problem, MAX_LEN, "Sqaure root of %.2f is %.2f", x, result);
                 history_count++;
                 break;
             }
@@ -349,7 +339,7 @@ void scientific_math() {
                 
                 result = pow(x, y);
                 printf("%f to the power of %f is %f\n", x, y, result);
-                snprintf(main_history[history_count].problem, MAX_LEN, "%f to the power of %f is %f", x, y, result);
+                snprintf(main_history[history_count].problem, MAX_LEN, "%.2f to the power of %.2f is %.2f", x, y, result);
                 history_count++;
                 break;
             }
@@ -413,12 +403,9 @@ void save_file() {
     printf("History saved to \"CalcHistory.txt\"");
 } 
 
+//This is used for the Basic Menu. snprintf is used for putting a string into an array
 void save_history(int a, int b, char op, int result) {
     if (history_count < MAX_HISTORY) {
-        history[history_count].a = a;
-        history[history_count].b = b;
-        history[history_count].op = op;
-        history[history_count].result = result;
         snprintf(main_history[history_count].problem, MAX_LEN, "%i %c %i = %i", a, op, b, result);
         history_count++;
     } else {
@@ -427,13 +414,10 @@ void save_history(int a, int b, char op, int result) {
     
 }
 
+//This is used only for the conversions menu
 void save_history2(float a, char op1, float b, char op2) {
     if(history_count < MAX_HISTORY) {
-        history2[history_count].a = a;
-        history2[history_count].op1 = op1;
-        history2[history_count].b = b;
-        history2[history_count].op2 = op2;
-        snprintf(main_history[history_count].problem, MAX_LEN, "%f %c = %f %c", a, op1, b, op2);
+        snprintf(main_history[history_count].problem, MAX_LEN, "%.2f %c = %.2f %c", a, op1, b, op2);
         history_count++;
     } else {
         printf("History is full!\n");
@@ -450,6 +434,7 @@ void view_history() {
     }
 }
 
+//Simple but effective
 void clear_history() {
     history_count = 0;
     printf("History Deleted!\n");
