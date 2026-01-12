@@ -4,33 +4,38 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
+
 typedef struct {
-    char key[9];
-    char value[50];
+    char Value[30];
 } Store;
 
 Store store[23];
+int value_count = 0;
 
 
-void user_input();
-void hashfunt();
 
-int main() {
+int main(void) {
 
-    while (1) {
-        printf(">");
+    char command[5];
+    char key[10];
+    char text[15];
+    char* end;
+    int x;
+    printf(">");
+    fgets(text, sizeof(text), stdin);
+    text[strcspn(text, "\n")] = '\0';
+    sscanf(text, "%5s %10s", command, key);
 
-    }
+    
+    printf("\n%s\n", key);
+    long index = strtol(key, &end, 10);
+    printf("\n%li\n", index);
+    //printf("Value: %s\n", store[index].Value);
+    
 
-
+    
     return 0;
 }
-
-void user_input() {
-
-}
-
-
-
