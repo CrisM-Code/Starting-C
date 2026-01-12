@@ -16,6 +16,14 @@ Store store[23];
 int value_count = 0;
 
 
+unsigned int hash(const char *key) {
+    unsigned int h = 0;
+    while (*key) {
+        h += (unsigned char)*key;  // add ASCII value
+        key++;
+    }
+    return h;
+}
 
 int main(void) {
 
@@ -31,8 +39,8 @@ int main(void) {
 
     
     printf("\n%s\n", key);
-    long index = strtol(key, &end, 10);
-    printf("\n%li\n", index);
+    int index = hash(key)%23;
+    printf("\n%i\n", index);
     //printf("Value: %s\n", store[index].Value);
     
 
