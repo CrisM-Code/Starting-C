@@ -16,19 +16,19 @@ Store store[23];
 int value_count = 0;
 
 //Hash function to turn the Key into an index number for array reference
-unsigned int hash(const char *key) {
-    unsigned int h = 0;
-    while (*key) {
-        h += (unsigned char)*key;  // add ASCII value
-        key++;
+unsigned int hash_function(char *name) {
+    int length = strlen(name);
+    unsigned int count = 0;
+    for (int i = 0; i < length; i++){
+        count += name[i];
+        count = count%23;
     }
-    return h;
+    return count;
 }
-
 
 int main(void) {
 
-    char command[3];
+    char command[4];
     char key[10];
     char text[15];
     
@@ -42,24 +42,33 @@ int main(void) {
             break;
         }
 
-        sscanf(text, "%3s %10s", command, key);
+        sscanf(text, "%3s %9s", command, key);
 
         if (strcmp(command, "get") == 0) {
-            int index = hash(key)%23;
+            int index = hash_function(key);
             printf("%s", store[index].Value);
         } 
         else if (strcmp(command, "set") == 0) {
-            int index = hash(key)%23;
+            if (value_count >= 23) {
+            printf("Storage is full!\n");
+            break;
+            }
+            
+            int index = hash_function(key);
             printf("Enter a Value: ");
             fgets(store[index].Value, sizeof(store[index].Value), stdin);
             printf("Value has been saved!\n");
             value_count++;
         } 
         else if (strcmp(command, "del")==0) {
-            int index = hash(key)%23;
-            strcpy(store[index].Value, "Empty");
-        }
-        else {
+            int index = hash_function(key);
+            strcpy(store[index].Value, "Empty\n");
+        } 
+        else if (strcmp(text, "help")==0) {
+            printf("==== Help Menu ====\n\nset: enter set <key> and you will be able to enter a value to store\n");
+            printf("get: enter get <key> and the value associated with the key will be returned.\n");
+            printf("del: enter del <key> and the value associated with the key will be deleted.\n");
+        } else {
             printf("Error!\n");
         }
     }
