@@ -13,6 +13,7 @@ FILE *fp;
 typedef struct {
     char Value[30];
     char key[10];
+    int index;
 } Store;
 
 Store store[23];
@@ -59,6 +60,7 @@ int main(void) {
         if (strcmp(command, "get") == 0) {
             int index = hash_function(key2);
             printf("%s\n", store[index].Value);
+            //printf("Value Count = %i\n", value_count);
         } 
 
         //If the user enters the set function then they can set a value to a key
@@ -67,27 +69,30 @@ int main(void) {
             //This checks if the storage is full
             if (value_count >= 23) {
                 printf("Storage is full!\n");
+                //printf("Value Count = %i\n", value_count);
                 break;
             }
             
             //First, this turns the key into a hash number. That number will be the array index
             int index = hash_function(key2);
+            store[index].index = index;
 
             //Second, it asks the user to enter a value. That value will get saved to the store struct
             printf("Enter a Value: ");
             fgets(store[index].Value, sizeof(store[index].Value), stdin);
             store[index].Value[strcspn(store[index].Value, "\n")] = '\0';
-
+            
             //Third, it prints value has been saved and increments the value count
             printf("Value has been saved!\n");
             value_count++;
+            //printf("Value Count = %i\n", value_count);
             
             //This line will copy the key to the store struct
             strcpy(store[index].key, key2);
-            fp = fopen("KeyValue.txt", "w");
-            for (int i = 0; i < 23; i++) {
-                fprintf(fp, "Key: %s Value: %s\n", store[i].key, store[i].Value);
-            }
+            fp = fopen("KeyValue.txt", "a");
+            
+            fprintf(fp, "Index: %i Key: %s Value: %s\n", store[index].index, store[index].key, store[index].Value);
+            
             fclose(fp);
         } 
 
@@ -98,7 +103,7 @@ int main(void) {
             strcpy(store[index].Value, "Empty\n");
             fp = fopen("KeyValue.txt", "w");
             for (int i = 0; i < value_count; i++) {
-                fprintf(fp, "Key: %s Value: %s\n", key2, store[index].Value);
+                fprintf(fp, "Index: %i Key: %s Value: %s\n", store[value_count].index, key2, store[index].Value);
             }
             fclose(fp);
         } 
@@ -125,12 +130,24 @@ int main(void) {
 void load_values() {
     fp = fopen("KeyValue.txt", "r");
     char line[40];
-    for (int j = 0; j < 23; j++) {
-        while (fgets(line, sizeof(line), fp) && value_count < 23) {
-            sscanf(line, "Key: %9s Value: %29s[^\n]\n", key2, store[value_count].Value);
-            value_count++;
-        }
+    int idx;
+    char text[15];
+    char key[10];
+
+    while (fgets(line, sizeof(line), fp) && value_count < 23) {
+        sscanf(line, "Index: %i Key: %9s Value: %29[^\n]\n", &idx, key, text);
+        store[idx].index = idx;
+        strcpy(store[idx].key, key);
+        strcpy(store[idx].Value, text);
+
+        value_count++;
     }
     fclose(fp);
 
+    //Debugging
+    /*
+    printf("Parsed idx=%d\n", idx);
+    printf("Parsed key=%s\n", store[idx].key);
+    printf("Parsed value=%s\n", store[idx].Value);
+    */
 }
